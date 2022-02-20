@@ -1,4 +1,5 @@
 import Data.Params;
+import Data.SpecData;
 import api.UserData;
 import io.restassured.http.ContentType;
 import io.restassured.internal.common.assertion.Assertion;
@@ -15,10 +16,10 @@ public class ReqresTest {
 
     @Test
     public void checkAvatarAndId() {
+        SpecData.installSpec(SpecData.requestSpec(Params.URL), SpecData.responseSpec200Ok());
         List<UserData> users = given()
                 .when()
-                .contentType(ContentType.JSON)
-                .get(Params.URL + "api/users?page=2")
+                .get( "api/users?page=2")
                 .then().log().all()
                 .extract().body().jsonPath().getList("data", UserData.class);
      //   users.stream().forEach(x-> x.getAvatar().contains(x.getId().toString()));
@@ -32,6 +33,11 @@ public class ReqresTest {
             Assertions.assertTrue(avatars.get(i).contains(id.get(i)));
             Assertions.assertTrue(emails.get(i).endsWith("@reqres.in"));
         }
+    }
+
+    @Test
+    public void successRegTest() {
+
     }
     //TODO https://www.youtube.com/watch?v=gxzXOMxIt4w&t=1618s - продолжить просмотр
     //TODO разобраться со стримами и с лямбда в java
