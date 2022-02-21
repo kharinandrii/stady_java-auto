@@ -1,5 +1,7 @@
 import Data.Params;
 import Data.SpecData;
+import api.Register;
+import api.SuccessReg;
 import api.UserData;
 import io.restassured.http.ContentType;
 import io.restassured.internal.common.assertion.Assertion;
@@ -37,7 +39,17 @@ public class ReqresTest {
 
     @Test
     public void successRegTest() {
-
+        SpecData.installSpec(SpecData.requestSpec(Params.URL), SpecData.responseSpec200Ok());
+        Integer id = 4;
+        String token = "QpwL5tke4Pnpja7X4";
+        Register userReg = new Register("eve.holt@reqres.in", "pistol");
+        SuccessReg successReg = given()
+                .body(userReg)
+                .when()
+                .post("api/register")
+                .then().log().all().extract().as(SuccessReg.class);
+     //   Assertions.assertEquals(id, successReg.getId());
+     //   Assertions.assertEquals(token, successReg.getToken());
     }
     //TODO https://www.youtube.com/watch?v=gxzXOMxIt4w&t=1618s - продолжить просмотр
     //TODO разобраться со стримами и с лямбда в java
